@@ -8,7 +8,7 @@ app = FastAPI(title="AI Career Copilot API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["https://ai-resume-analyzer-92v2.vercel.app/", "http://localhost:5173",],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
