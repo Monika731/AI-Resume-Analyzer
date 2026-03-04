@@ -126,7 +126,12 @@ export default function App() {
       setShowAllRecs(false);
     } catch (err) {
       console.error(err);
-      alert("Error calling backend. Check backend is running on port 8000.");
+      const msg =
+        err?.response?.data?.error ||
+        err?.response?.statusText ||
+        err?.message ||
+        "Unknown error";
+      alert(`Backend error: ${msg}`);
     } finally {
       setLoading(false);
     }
