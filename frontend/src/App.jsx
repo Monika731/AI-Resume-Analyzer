@@ -41,6 +41,8 @@ function ScoreCard({ score }) {
 }
 
 export default function App() {
+  const API_BASE = import.meta.env.VITE_API_URL;
+
   const [resumeFile, setResumeFile] = useState(null);
   const [jobDescription, setJobDescription] = useState("");
   const [result, setResult] = useState(null);
@@ -100,11 +102,9 @@ export default function App() {
       formData.append("resume", resumeFile);
       formData.append("job_description", jobDescription);
 
-      const response = await axios.post(
-        "http://localhost:8000/analyze",
-        formData,
-        { headers: { "Content-Type": "multipart/form-data" } }
-      );
+      const response = await axios.post(`${API_BASE}/analyze`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
 
       const data = response.data;
       setResult(data);
