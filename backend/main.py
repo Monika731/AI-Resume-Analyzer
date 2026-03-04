@@ -15,8 +15,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Load embedding model once when server starts (fast + efficient)
-embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
+_model = None
+
+def get_model():
+    global _model
+    if _model is None:
+        _model = SentenceTransformer("all-MiniLM-L6-v2")
+    return _model
 
 
 def extract_text_from_pdf_bytes(pdf_bytes: bytes) -> str:
@@ -171,7 +176,8 @@ async def analyze(
         return {"error": "Job description is empty. Please paste a job description."}
 
     # Embeddings + cosine similarity
-    emb = embedding_model.encode([resume_text, jd_text])
+    model = get_model()
+    emb = model.encode([resume_text, jd_text])
     sim = float(cosine_similarity([emb[0]], [emb[1]])[0][0])  # -1..1 but usually 0..1 for these
     score = round(max(0.0, min(1.0, sim)) * 100, 1)
 
